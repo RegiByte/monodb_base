@@ -1,8 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import './database/index';
 import router from './routes';
 import { errorHandler } from './helper/errorHandlers';
+import { ROUTE_NOT_FOUND } from './constants/errors';
 
 class App {
   constructor({ port }) {
@@ -24,6 +26,11 @@ class App {
 
   routes() {
     this.server.use(router);
+    this.server.use('*', (req, res) =>
+      res.json({
+        message: ROUTE_NOT_FOUND,
+      })
+    );
   }
 
   exceptionHandlers() {
